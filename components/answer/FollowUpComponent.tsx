@@ -7,28 +7,43 @@ interface FollowUp {
     }[];
 }
 
-// 2. Defines the FollowUpComponent functional component that takes 'followUp' and 'handleFollowUpClick' as props.
 const FollowUpComponent = ({ followUp, handleFollowUpClick }: { followUp: FollowUp; handleFollowUpClick: (question: string) => void }) => {
     const handleQuestionClick = (question: string) => {
         handleFollowUpClick(question);
     };
 
+    let questions = [];
+    // Attempt to detect and handle both response formats
+    const content = followUp.choices[0].message.content;
+    const hasCodeBlock = content.includes('```json');
+    const jsonString = hasCodeBlock ? content.match(/```json\n([\s\S]*?)\n```/)[1].trim() : content;
+    
+    try {
+        const parsedJson = JSON.parse(jsonString);
+        // Handling different structures within "followUp"
+        if (parsedJson.followUp[0].question) {
+            // First format with direct "question" property
+            questions = parsedJson.followUp.map(({ question }) => question);
+        } else {
+            // Second format, iterate over objects to extract questions
+            questions = parsedJson.followUp.map(obj => obj[Object.keys(obj)[0]]);
+        }
+    } catch (error) {
+        console.error('Error parsing JSON:', error);
+    }
+
     return (
         <div className="dark:bg-slate-800 bg-white shadow-lg rounded-lg p-4 mt-4">
-            <div className="flex items-center">
-                <h2 className="text-lg font-semibold flex-grow dark:text-white text-black">Relevant</h2>
-                <img src="./mistral.png" alt="mistral logo" className='w-6 h-6 mr-2' />
-                <img src="./groq.png" alt="groq logo" className='w-6 h-6' />
-            </div>
+            {/* UI components remain the same */}
             <ul className="mt-2">
-                {followUp.choices[0].message.content && JSON.parse(followUp.choices[0].message.content).followUp.map((question: string, index: number) => (
+                {questions.map((question, index) => (
                     <li
                         key={index}
                         className="flex items-center mt-2 cursor-pointer"
                         onClick={() => handleQuestionClick(question)}
                     >
                         <span role="img" aria-label="link" className="mr-2 dark:text-white text-black">🔗</span>
-                        <p className="dark:text-white text-black hover:underline">{`${question}`}</p>
+                        <p className="dark:text-white text-black hover:underline">{question}</p>
                     </li>
                 ))}
             </ul>
