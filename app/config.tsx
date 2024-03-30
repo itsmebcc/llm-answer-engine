@@ -7,9 +7,9 @@
 export const config = {
     useOllamaInference: false, 
     useOllamaEmbeddings: true, 
-    inferenceModel: 'mixtral-8x7b-32768', // Groq: 'mixtral-8x7b-32768', 'gemma-7b-it' // OpenAI: 'gpt-3.5-turbo', 'gpt-4' // Ollama 'mistral', 'llama2' etc
+    inferenceModel: 'qwen1_5-14b-chat-q8_0.gguf', // Groq: 'mixtral-8x7b-32768', 'gemma-7b-it' // OpenAI: 'gpt-3.5-turbo', 'gpt-4' // Ollama 'mistral', 'llama2' etc
     inferenceAPIKey: process.env.GROQ_API_KEY, // Groq: process.env.GROQ_API_KEY // OpenAI: process.env.OPENAI_API_KEY // Ollama: 'ollama' is the default
-    embeddingsModel: 'qwen:latest', // Ollama: 'llama2', 'nomic-embed-text' // OpenAI 'text-embedding-3-small', 'text-embedding-3-large'
+    embeddingsModel: 'mxbai-embed-large', // Ollama: 'llama2', 'nomic-embed-text' // OpenAI 'text-embedding-3-small', 'text-embedding-3-large'
     textChunkSize: 600, // Recommended to decrease for Ollama
     textChunkOverlap: 200, // Recommended to decrease for Ollama
     numberOfSimilarityResults: 4, // Numbher of similarity results to return per page
