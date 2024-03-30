@@ -14,7 +14,8 @@ import { config } from './config';
 let openai: OpenAI;
 if (config.useOllamaInference) {
   openai = new OpenAI({
-    baseURL: 'http://localhost:11434/v1',
+//    baseURL: 'http://localhost:11434/v1',
+    baseURL: 'http://localhost:5000/v1',
     apiKey: 'ollama'
   });
 } else {
@@ -246,7 +247,7 @@ const relevantQuestions = async (sources: SearchResult[]): Promise<any> => {
       {
         role: "system",
         content: `
-          You are a Question generator who generates an array of 3 follow-up questions in JSON format.
+          You are a Question generator who generates an array of 3 follow-up questions in JSON format. You will ONLY respond with the JSON object.
           The JSON schema should include:
           {
             "original": "The original search query or context",
